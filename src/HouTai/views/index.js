@@ -38,11 +38,13 @@ const Login=loadable(()=>import('./Login'))
 const ArticleList=loadable(()=>import('./Article'))
 const ArticleEdit=loadable(()=>import('./Article/Edit'))
 const NotFound=loadable(()=>import('./NotFound'))
+const Notifications=loadable(()=>import('./Notifications'))
 export{
     Dashboard,
     Login,
     NotFound,
     Settings,
     ArticleList,
-    ArticleEdit
+    ArticleEdit,
+    Notifications
 }

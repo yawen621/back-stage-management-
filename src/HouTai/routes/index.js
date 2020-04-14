@@ -4,7 +4,8 @@ import {
     NotFound,
     Settings,
     ArticleList,
-    ArticleEdit
+    ArticleEdit,
+    Notifications
 } from '../views'
 import { DashboardOutlined, SettingOutlined, UnorderedListOutlined } from '@ant-design/icons'
 
@@ -32,6 +33,9 @@ export const adminRouter = [{
 }, {
     pathname: '/admin/article/edit/:id',
     component: ArticleEdit
+}, {
+    pathname: '/admin/Notifications',
+    component: Notifications
 }, {
     pathname: '/admin/settings',
     component: Settings,

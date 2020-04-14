@@ -207,9 +207,9 @@ export default class Article extends Component {
             ])
         }
         /* convert state to workbook */
-        const ws = XLSX.utils.aoa_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+        const ws = XLSX.utils.aoa_to_sheet(data)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
         /* generate XLSX file and send to client */
         XLSX.writeFile(wb, `路飞-${this.state.offset / this.state.limited + 1}-${moment().format('YYYYMMDDHHmmss')}.xlsx`)
     }
@@ -234,7 +234,7 @@ export default class Article extends Component {
                         onShowSizeChange: this.onShowSizeChange,
                         pageSizeOptions: ['10', '15', '20', '30']
                     }}
-                />;
+                />
                 <Modal
                     title='此操作不可逆,请谨慎操作！！！'
                     visible={this.state.isShowArticleModal}
