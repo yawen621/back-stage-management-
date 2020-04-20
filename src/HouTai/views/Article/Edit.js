@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react'
 import { Card, Button, Form, Input, DatePicker, Spin,message} from 'antd'
 import E from 'wangeditor'
 import './edit.less'
-import { getArticleById, saveArticle } from '../../requests'
+import { getArticleById} from '../../requests'
 
 import moment from 'moment'
 const formItemLayout = {
@@ -41,7 +41,8 @@ export default class Edit extends Component {
             isSaving:true
         })
         // console.log(data)
-        saveArticle(this.props.match.params.id, data)
+        
+        (this.props.match.params.id, data)
             .then(resp => {
                 message.success(resp)
                 // 如果需要是要跳转

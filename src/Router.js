@@ -17,10 +17,7 @@ export default class Routers extends Component {
                 <ConfigProvider locale={zhCN}>
                     <Router>
                         <Switch>
-                            <Route path="/admin" render={(routerProps) => {
-                                // TODO权限，需要登录才能访问/admin
-                                return <HouTai {...routerProps} />
-                            }} />
+                            <Route path="/admin" component={HouTai} />
                             {
                                 mainRouter.map(route => {
                                     return <Route key={route.pathname} path={route.pathname} component={route.component} />

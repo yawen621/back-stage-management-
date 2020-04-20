@@ -5,7 +5,6 @@ import moment from 'moment'
 
 
 import { getArticles, deleteArticleById } from '../../requests'
-import { ExclamationCircleOutlined } from '@ant-design/icons'
 const displayTitle = {
     id: 'id',
     title: '标题',
@@ -29,6 +28,15 @@ export default class Article extends Component {
             deleteArticleConfirmLoading: false,
             deleteArticleID: null
         }
+    }
+    componentDidMount() {
+        // console.log(this)
+        this.getDate()
+    }
+
+    componentWillUnmount() {
+        console.log(this.updater.isMounted(this))
+        console.log('componentWillUnmount')
     }
 
     createColumns = (columnsKeys) => {
@@ -73,7 +81,7 @@ export default class Article extends Component {
             key: 'action',
             render: (text, record) => {
                 return <ButtonGroup>
-                    <Button size="small" type="primary" onClick={this.toEdit.bind(this,record.id)}>编辑</Button>
+                    <Button size="small" type="primary" onClick={this.toEdit.bind(this, record.id)}>编辑</Button>
                     <Button size="small" type="danger" onClick={() => this.showDeleteArticle(record)}>删除</Button>
                 </ButtonGroup>
             }
@@ -81,7 +89,7 @@ export default class Article extends Component {
         return colums
     }
 
-    toEdit=(id)=>{
+    toEdit = (id) => {
         this.props.history.push(`/admin/article/edit/${id}`)
     }
 
@@ -117,8 +125,8 @@ export default class Article extends Component {
                 message.success(resp.msg)
                 // 这里项目经验跟产品沟通究竟是留在当前页还是到第一页
                 this.setState({
-                    offset:0
-                },()=>{
+                    offset: 0
+                }, () => {
                     this.getDate()
                 })
             })
@@ -138,17 +146,21 @@ export default class Article extends Component {
             deleteArticleConfirmLoading: false
         })
     }
+    setData = (state) => {
+        if (!this.updater.isMounted(this)) return
+        this.setState(state)
+    }
     getDate = () => {
         this.setState({
             isLoading: true
         })
         getArticles(this.state.offset, this.state.limited)
             .then(response => {
-                console.log(response)
                 const columnsKeys = Object.keys(response.list[0])
                 const columns = this.createColumns(columnsKeys)
-                console.log(response.list)
-                this.setState({
+                // 如果请求完成之后组件已经销毁，就不需要在设置setState
+                // if(!this.updater.isMounted(this)) return
+                this.setData({
                     total: response.total,
                     dataSource: response.list,
                     columns
@@ -158,6 +170,7 @@ export default class Article extends Component {
                 // 处理错误，虽然有全局处理
             })
             .finally(() => {
+                if (!this.updater.isMounted(this)) return
                 this.setState({
                     isLoading: false
                 })
@@ -187,15 +200,13 @@ export default class Article extends Component {
         })
     }
 
-    componentDidMount() {
-        this.getDate()
-    }
+
     // 导出函数
     toExcel = () => {
         // 在实际项目中实际上这个功能是前端发送一个ajax请求到后端，然后后端返回一个文件下载的地址
         const data = [Object.keys(this.state.dataSource[0])]
         //[['id','title','author','amount','createAt']]
-        for (let i = 0; i < this.state.dataSource.length; i++) {
+        for (let i = 0; i < this.state.dataSource.length; i++) {                           
             // const values=Object.values(this.state.dataSource[i])
             // data.push(values)
             data.push([

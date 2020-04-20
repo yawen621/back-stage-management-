@@ -2,9 +2,17 @@ import React, { Component } from 'react'
 import { adminRouter } from './HouTai/routes'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import  {Frame}  from './HouTai/components'
+import {connect} from 'react-redux'
+const mapState=(state)=>({
+    isLogin:state.users.isLogin,
+    role:state.users.role
+})
+@connect(mapState)
 class App extends Component {
     render() {
         return (
+            this.props.isLogin
+            ?
             <Frame>
                 <Switch>
                     {
@@ -14,8 +22,8 @@ class App extends Component {
                                 path={route.pathname}
                                 exact={route.exact}
                                 render={(routerProps) => {
-                                    console.log(routerProps)
-                                    return <route.component {...routerProps} />
+                                    const hasPermission=route.roles.includes(this.props.role)
+                                    return hasPermission ? <route.component{...routerProps} /> : <Redirect to="/admin/noauth"/>
                                 }} />
                         })
                     }
@@ -23,6 +31,8 @@ class App extends Component {
                     <Redirect to='/404' />
                 </Switch>
             </Frame>
+            :
+            <Redirect to="/login"/>
         )
     }
 }

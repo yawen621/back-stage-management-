@@ -21,7 +21,7 @@ const mapState = (state) => {
 @connect(mapState, { markNotificationAsReadById, markAllNotificationAsRead })
 class Notifications extends Component {
     render() {
-        console.log(this.props.isLoading)
+        console.log(this.props)
         return (
             <Spin spinning={this.props.isLoading}>
                 <Card title='通知中心'

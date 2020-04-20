@@ -7,46 +7,52 @@ import { withRouter, NavLink } from 'react-router-dom'
 import './frame.less'
 import logo from './logo.png'
 import { DownOutlined } from '@ant-design/icons'
-import {connect} from 'react-redux'
-import {getNotificationsList} from '../../actions/notifications'
+import { connect } from 'react-redux'
+import { getNotificationsList } from '../../actions/notifications'
+import {logout} from '../../actions/user'
 // const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-const mapState=state=>{
-  // console.log(state)
-  return{
-    notificationsCount:state.notfications.list.filter(item=>item.hasRead===false).length
+const mapState = state => {
+  console.log(state)
+  return {
+    notificationsCount: state.notfications.list.filter(item => item.hasRead === false).length,
+    avatar: state.users.avatar,
+    displayName: state.users.displayName
   }
 }
-@connect(mapState,{getNotificationsList})
+@connect(mapState, { getNotificationsList,logout})
 @withRouter
 class Frame extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this.props.getNotificationsList()
   }
   // onMenuClick = ({ key }) => {
   //   // console.log(key)
   //   this.props.history.push(key)
   // }
-  onDropDownMenuClick=({key})=>{
-    console.log(key)
-    this.props.history.push(key)
+  onDropDownMenuClick = ({ key }) => {
+    if(key==='/login'){
+      this.props.logout()
+    }else{
+      this.props.history.push(key)
+    }
   }
-  renderDropdown=()=> (
+  renderDropdown = () => (
     <Menu onClick={this.onDropDownMenuClick}>
       <Menu.Item
-      key="/admin/notifications">
+        key="/admin/notifications">
         <Badge dot={Boolean(this.props.notificationsCount)}>
           通知中心
           </Badge>
       </Menu.Item>
       <Menu.Item
-      key="/admin/settings"
+        key="/admin/profile"
       >
         个人设置
       </Menu.Item>
       <Menu.Item
-      key="/login"
+        key="/login"
       >
         退出登录
       </Menu.Item>
@@ -69,7 +75,7 @@ class Frame extends Component {
             <Dropdown overlay={this.renderDropdown()}>
 
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3934180438,3804911389&fm=26&gp=0.jpg" /> <span>欢迎您!路飞</span>
+                <Avatar src={this.props.avatar} /> <span>欢迎您!{this.props.displayName}</span>
                 <Badge count={this.props.notificationsCount} offset={[-10, -10]}>
                   <DownOutlined />
                 </Badge>

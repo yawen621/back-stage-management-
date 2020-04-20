@@ -5,7 +5,9 @@ import {
     Settings,
     ArticleList,
     ArticleEdit,
-    Notifications
+    Notifications,
+    NoAuth,
+    Profile
 } from '../views'
 import { DashboardOutlined, SettingOutlined, UnorderedListOutlined } from '@ant-design/icons'
 
@@ -22,25 +24,38 @@ export const adminRouter = [{
     component: Dashboard,
     icon: DashboardOutlined,
     title: '仪表盘',
-    isNav: true
+    isNav: true,
+    roles:['001','002','003']
 }, {
     pathname: '/admin/article',
     component: ArticleList,
     title: '文章管理',
     icon: UnorderedListOutlined,
     isNav: true,
-    exact: true
+    exact: true,
+    roles:['001']
 }, {
     pathname: '/admin/article/edit/:id',
-    component: ArticleEdit
+    component: ArticleEdit,
+    roles:['001','002']
+}, {
+    pathname: '/admin/noauth',
+    component: NoAuth,
+    roles:['001','002','003']
 }, {
     pathname: '/admin/Notifications',
-    component: Notifications
+    component: Notifications,
+    roles:['001','002','003']
+}, {
+    pathname: '/admin/profile',
+    component: Profile,
+    roles:['001','002','003']
 }, {
     pathname: '/admin/settings',
     component: Settings,
     icon: SettingOutlined,
     title: '设置',
-    isNav: true
+    isNav: true,
+    roles:['001']
 }
 ]

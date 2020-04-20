@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react'
-import { Card, Button, Col, Row } from 'antd'
+import { Card,Col, Row } from 'antd'
 import './dashboard.less'
 import echarts from 'echarts'
 import { getArticleAmount } from '../../requests'

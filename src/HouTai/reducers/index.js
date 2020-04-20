@@ -3,8 +3,10 @@
 import {combineReducers} from 'redux'
 // 引入cart reducer，如果有多个，继续引入
 import notfications from './notification'
+import users from './users'
 // 导出合并后的reducer
 export default combineReducers({
      // 把多个reducer作为combineReducers对象参数传入，在外部可以通过store.getState().cart来获取Reducer里面的state
-     notfications
+     notfications,
+     users
 })
