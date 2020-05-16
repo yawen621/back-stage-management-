@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import XLSX from 'xlsx'
-import { Card, Button, Table, Tag, Modal, Typography, message, Tooltip } from 'antd'
+import { Card, Button, Table, Tag, Modal, Typography, message} from 'antd'
 import moment from 'moment'
 
 
 import { getArticles, deleteArticleById } from '../../requests'
 const displayTitle = {
-    id: 'id',
-    title: '标题',
-    author: '作者',
-    createAt: '创建时间',
-    amount: '阅读量'
+    wid: 'id',
+    phone: '手机号',
+    contact: '联系人',
+    time: '邀请时间',
 }
 const ButtonGroup = Button.Group
 export default class Article extends Component {
@@ -39,28 +38,10 @@ export default class Article extends Component {
         console.log('componentWillUnmount')
     }
 
-    createColumns = (columnsKeys) => {
-        const colums = columnsKeys.map(item => {
-            if (item === 'amount') {
-                return {
-                    title: displayTitle[item],
-                    key: item,
-                    render: (text, record) => {
-                        // console.log(record)
-                        const { amount } = record
-                        // 这里是根据一个数字大小做一个条件渲染
-                        // 同理可以根据职位级别不同的颜色
-                        // const titleMep={
-                        //     '001':'red',
-                        //     '002':'#09f',
-                        //     '003':'green'
-                        // }
-                        // return <Tag color={titleMep[titleKey]}>{text.amount}</Tag>
-                        return <Tooltip title={amount > 220 ? '超过220' : '没超过220'}><Tag color={amount > 220 ? 'red' : 'green'}>{text.amount}</Tag></Tooltip>
-                    }
-                }
-            }
-            if (item === 'createAt') {
+    createColumns = (a) => {
+        // console.log(columnsKeys)
+        const colums = a.map(item => {
+            if (item === 'time') {
                 return {
                     title: displayTitle[item],
                     key: item,

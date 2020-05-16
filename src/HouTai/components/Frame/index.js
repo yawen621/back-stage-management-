@@ -9,7 +9,8 @@ import logo from './logo.png'
 import { DownOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
 import { getNotificationsList } from '../../actions/notifications'
-import {logout} from '../../actions/user'
+import { logout } from '../../actions/user'
+import SubMenu from 'antd/lib/menu/SubMenu';
 // const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
@@ -21,7 +22,7 @@ const mapState = state => {
     displayName: state.users.displayName
   }
 }
-@connect(mapState, { getNotificationsList,logout})
+@connect(mapState, { getNotificationsList, logout })
 @withRouter
 class Frame extends Component {
   componentDidMount() {
@@ -32,9 +33,9 @@ class Frame extends Component {
   //   this.props.history.push(key)
   // }
   onDropDownMenuClick = ({ key }) => {
-    if(key==='/login'){
+    if (key === '/login') {
       this.props.logout()
-    }else{
+    } else {
       this.props.history.push(key)
     }
   }
@@ -67,14 +68,14 @@ class Frame extends Component {
     const menus = adminRouter.filter(route => route.isNav === true)
     return (
       <Layout style={{ minHeight: '100%' }}>
-        <Header className="header qf-header" style={{ background: '#fff' }}>
+        <Header className="header qf-header" style={{ background: '#001529' }}>
           <div className="qf-logo">
             <img src={logo} alt="QFADMIN" />
           </div>
           <div>
             <Dropdown overlay={this.renderDropdown()}>
 
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center' ,color:'#fff'}}>
                 <Avatar src={this.props.avatar} /> <span>欢迎您!{this.props.displayName}</span>
                 <Badge count={this.props.notificationsCount} offset={[-10, -10]}>
                   <DownOutlined />
@@ -85,11 +86,13 @@ class Frame extends Component {
         </Header>
         <Layout>
           <Sider width={200} className="site-layout-background">
-            <Menu
+            <Menu 
               mode="inline"
               defaultSelectedKeys={[selectedKeyArr.join('/')]}
               onClick={this.onMenuClick}
+              
               style={{ height: '100%', borderRight: 0 }}
+              
             >
               {
                 menus.map(item => {

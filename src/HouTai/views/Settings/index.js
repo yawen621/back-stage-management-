@@ -4,7 +4,7 @@ export default class Setting extends Component {
     render() {
         return (
             <div>
-                设置页
+                
             </div>
         )
     }

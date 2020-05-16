@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 
-export default class Home extends Component {
+export default class Authority extends Component {
     render() {
-        console.log(this.props)
         return (
             <div>
-                首页
+                权限管理页面
             </div>
         )
     }

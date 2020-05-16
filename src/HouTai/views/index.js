@@ -41,6 +41,7 @@ const NotFound=loadable(()=>import('./NotFound'))
 const Notifications=loadable(()=>import('./Notifications'))
 const NoAuth=loadable(()=>import('./NoAuth'))
 const Profile=loadable(()=>import('./Profile'))
+const Authority=loadable(()=>import('./Authority'))
 export{
     Dashboard,
     Login,
@@ -50,5 +51,6 @@ export{
     ArticleEdit,
     Notifications,
     NoAuth,
-    Profile
+    Profile,
+    Authority
 }

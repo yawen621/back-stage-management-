@@ -42,21 +42,33 @@ export default class Dashboard extends Component {
     render() {
         return (
             <>
-                <Card title='概览'
+                <Card title='网站数据'
                     bordered={false}
                 >
                     <Row gutter={16}>
                         <Col className="gutter-row" span={6}>
-                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>col-6</div>
+                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>
+                                用户
+                               <span className="qf-span">2</span>
+                            </div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>col-6</div>
+                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>
+                                通讯录
+                                <span className="qf-span">2</span>
+                            </div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>col-6</div>
+                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>
+                                管理员
+                                <span className="qf-span">2</span>
+                            </div>
                         </Col>
                         <Col className="gutter-row" span={6}>
-                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>col-6</div>
+                            <div className="qf-gutter-box" style={{ backgroundColor: overViewColors() }}>
+                                短信数据
+                                <span className="qf-span">2</span>
+                            </div>
                         </Col>
 
                     </Row>

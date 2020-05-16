@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import App from './Router'
-import App from './redux+immutable'
+import App from './Router'
+// import App from './redux+immutable'
 // import {cloneDeep} from 'lodash'
 // import {Map,List,fromJS,toJS} from 'immutable'
 // import store from './Redux/store'
-import store from './redux+immutable/store'
+// import store from './redux+immutable/store'
 // Provider是react-redux提供的一个组件
-import { Provider } from 'react-redux'
+// import { Provider } from 'react-redux'
 // import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
 
 // const state={
@@ -49,7 +49,7 @@ ReactDOM.render(
     //     <Route component={App}/>
     // </Router>
     //  </Provider> 
-    <Provider store={store}>
+    // <Provider store={store}>
     <App/>
-    </Provider>
+    // </Provider>
     , document.querySelector('#root'))

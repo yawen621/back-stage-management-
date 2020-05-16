@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 
-// NODE_ENV不是process.env对象上原有的属性，它是我们自己添加上去的一个环境变量，用来确定当前所处的开发阶段。一般生产阶段设为production，开发阶段设为develop，然后在脚本中读取process.env.NODE_ENV。
+// NODE_ENV不是process.env对象上原有的属性，它是我们自己添加上去的一个环境变量，用来确定当前所处的开发阶段。一般生产阶段设为production，开发阶段设为development，然后在脚本中读取process.env.NODE_ENV。
 // 运行脚本时，可以这样改变环境变量, 在package.json文件的scripts里面添加命令：
 const isDev = process.env.NODE_ENV === 'development'
 
