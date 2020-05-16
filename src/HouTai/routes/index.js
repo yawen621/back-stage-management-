@@ -8,9 +8,10 @@ import {
     Notifications,
     NoAuth,
     Profile,
-    Authority
+    Authority,
+    Home
 } from '../views'
-import { VideoCameraOutlined, ReadOutlined, MailOutlined,UnlockOutlined } from '@ant-design/icons'
+import { VideoCameraOutlined, ReadOutlined, MailOutlined, UnlockOutlined,HomeOutlined} from '@ant-design/icons'
 
 export const mainRouter = [{
     pathname: '/login',
@@ -21,12 +22,20 @@ export const mainRouter = [{
 }]
 
 export const adminRouter = [{
+    pathname:'/admin/home',
+    icon:HomeOutlined,
+    component:Home,
+    isNav: true,
+    title:'首页',
+    isNav:true,
+    roles:['001']
+},{
     pathname: '/admin/dashboard',
     component: Dashboard,
     icon: VideoCameraOutlined,
     title: '设备查看',
     isNav: true,
-    roles: ['001', '002', '003'],
+    roles: ['001'],
 }, {
     pathname: '/admin/article',
     component: ArticleList,
@@ -42,16 +51,18 @@ export const adminRouter = [{
     title: '短信查看',
     isNav: true,
     roles: ['001']
-},{
-    pathname:'/admin/authority',
-    component:Authority,
-    icon:UnlockOutlined,
-    title:'权限管理'
+}, {
+    pathname: '/admin/authority',
+    component: Authority,
+    icon: UnlockOutlined,
+    isNav: true,
+    title: '权限管理',
+    roles: ['001']
 },
 {
     pathname: '/admin/article/edit/:id',
     component: ArticleEdit,
-    roles: ['001', '002']
+    roles: ['001']
 }, {
     pathname: '/admin/noauth',
     component: NoAuth,

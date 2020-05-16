@@ -191,11 +191,10 @@ export default class Article extends Component {
             // const values=Object.values(this.state.dataSource[i])
             // data.push(values)
             data.push([
-                this.state.dataSource[i].id,
-                this.state.dataSource[i].title,
-                this.state.dataSource[i].author,
-                this.state.dataSource[i].amount,
-                moment(this.state.dataSource[i].createAt).format('YYYY年MM月DD日 hh:mm:ss')
+                this.state.dataSource[i].wid,
+                this.state.dataSource[i].phone,
+                this.state.dataSource[i].contact,
+                moment(this.state.dataSource[i].time).format('YYYY年MM月DD日 hh:mm:ss')
             ])
         }
         /* convert state to workbook */
@@ -208,7 +207,7 @@ export default class Article extends Component {
 
     render() {
         return (
-            <Card title="文章列表"
+            <Card title="通讯录列表"
                 bordered={false}
                 extra={< Button onClick={this.toExcel} > 导出excel</Button>}
             >

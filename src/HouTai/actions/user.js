@@ -16,8 +16,8 @@ const loginSuccess = (userInfo) => {
     }
 }
 const loginFailed = () => {
-    window.localStorage.removeItem('authToken')
-    window.sessionStorage.removeItem('authToken')
+    window.localStorage.removeItem('token')
+    window.sessionStorage.removeItem('token')
     window.localStorage.removeItem('userInfo')
     window.sessionStorage.removeItem('userInfo')
     return {
@@ -43,18 +43,19 @@ export const login = (userInfo) => dispatch => {
     dispatch(startLogin())
     loginRequest(userInfo)
         .then(resp => {
-            if (resp.data.code === 200) {
+            console.log(resp)
+            if (resp.status === 200) {
                 const {
-                    authToken,
+                    token,
                     ...userInfo
-                } = resp.data.data
+                } = resp.data.data.user.role
                 const remember=JSON.parse(resp.config.data).remember
                 console.log(remember)
                 if (remember === true) {
-                    window.localStorage.setItem('authToken', authToken)
+                    window.localStorage.setItem('token', token)
                     window.localStorage.setItem('userInfo', JSON.stringify(userInfo))
                 } else {
-                    window.sessionStorage.setItem('authToken', authToken)
+                    window.sessionStorage.setItem('token',token)
                     window.sessionStorage.setItem('userInfo', JSON.stringify(userInfo))
                 }
                 dispatch(loginSuccess(resp.data.data))

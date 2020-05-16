@@ -6,20 +6,34 @@ import { message } from 'antd'
 const isDev = process.env.NODE_ENV === 'development'
 
 const service = axios.create({
-    baseURL: isDev ? 'http://rap2.taobao.org:38080/app/mock/249906' : ''
+    baseURL: isDev ? 'http://cs.888dfp.com:9070' : '',
+    withCredentials: true,
+    crossDomain: true,
+    //默认返回json数据
+    responseType: 'json',
+    //post请求头
+    headers: { "Content-Type": "application/json" }
 })
 const service1 = axios.create({
-    baseURL: isDev ? 'http://rap2.taobao.org:38080/app/mock/249906' : ''
+    baseURL: isDev ? 'http://cs.888dfp.com:9070' : '',
+    withCredentials: true,
+    crossDomain: true,
+    //默认返回json数据
+    responseType: 'json',
+    //post请求头
+    headers: { "Content-Type": "application/json" }
 })
 
 // 请求拦截器
 service.interceptors.request.use((config) => {
     // 在发起请求请做一些业务处理
     console.log(config)
-    config.data = Object.assign({}, config.data, {
-        // authToken:window.localStorage.getItem('authToken')
-        authToken: 'itisatokenplaceholders'
-    })
+    // config.data = Object.assign({}, config.data, {
+    //     Token:window.localStorage.getItem('authToken')
+    // })
+    if(config.url!=="/login"){
+        config.headers.Authorization = localStorage.token;
+    }
     return config
 }, function (error) {
     // 对请求失败做处理
@@ -29,8 +43,8 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use((response) => {
     // 对响应数据做处理
     console.log(response)
-    if (response.data.code === 200) {
-        return response.data.data
+    if (response.status === 200) {
+        return response
     } else {
         // 全局处理错误
         message.error(response.data.errMsg)
@@ -74,5 +88,5 @@ export const getNotifications = () => {
 }
 // 登录
 export const loginRequest = (userInfo) => {
-        return service1.post('/api/v1/login',userInfo)
+        return service.post('/login',userInfo)
     }

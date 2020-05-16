@@ -60,7 +60,7 @@ class Login extends Component {
                                 onFinishFailed={this.onFinishFailed}
                             >
                                 <Form.Item
-                                    name="username"
+                                    name="user_name"
                                     rules={[{ required: true, message: '用户名必须' }]}
                                 >
                                     <Input
@@ -69,7 +69,7 @@ class Login extends Component {
                                         />
                                 </Form.Item>
                                 <Form.Item
-                                    name="password"
+                                    name="pwd"
                                     rules={[{ required: true, message: '密码是必须' }]}
                                 >
                                     <Input

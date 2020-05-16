@@ -42,6 +42,7 @@ const Notifications=loadable(()=>import('./Notifications'))
 const NoAuth=loadable(()=>import('./NoAuth'))
 const Profile=loadable(()=>import('./Profile'))
 const Authority=loadable(()=>import('./Authority'))
+const Home=loadable(()=>import('./Home'))
 export{
     Dashboard,
     Login,
@@ -52,5 +53,6 @@ export{
     Notifications,
     NoAuth,
     Profile,
-    Authority
+    Authority,
+    Home
 }
