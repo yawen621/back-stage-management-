@@ -1,6 +1,7 @@
 import actionTypes from './actionType'
 import { loginRequest } from '../requests'
 
+
 const startLogin = () => {
     return {
         type: actionTypes.START_LOGIN
@@ -43,14 +44,12 @@ export const login = (userInfo) => dispatch => {
     dispatch(startLogin())
     loginRequest(userInfo)
         .then(resp => {
-            console.log(resp)
-            if (resp.status === 200) {
+            if (resp.data.code === 200) {
                 const {
                     token,
                     ...userInfo
                 } = resp.data.data.user.role
                 const remember=JSON.parse(resp.config.data).remember
-                console.log(remember)
                 if (remember === true) {
                     window.localStorage.setItem('token', token)
                     window.localStorage.setItem('userInfo', JSON.stringify(userInfo))

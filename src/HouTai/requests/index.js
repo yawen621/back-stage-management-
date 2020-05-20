@@ -14,79 +14,115 @@ const service = axios.create({
     //post请求头
     headers: { "Content-Type": "application/json" }
 })
-const service1 = axios.create({
-    baseURL: isDev ? 'http://cs.888dfp.com:9070' : '',
-    withCredentials: true,
-    crossDomain: true,
-    //默认返回json数据
-    responseType: 'json',
-    //post请求头
-    headers: { "Content-Type": "application/json" }
-})
 
-// 请求拦截器
-service.interceptors.request.use((config) => {
-    // 在发起请求请做一些业务处理
-    console.log(config)
-    // config.data = Object.assign({}, config.data, {
-    //     Token:window.localStorage.getItem('authToken')
-    // })
-    if(config.url!=="/login"){
-        config.headers.Authorization = localStorage.token;
+service.interceptors.request.use(config => {
+
+    if (config.url !== "user/login") {
+        config.headers.Authorization = localStorage.token || sessionStorage.token;
     }
-    return config
-}, function (error) {
-    // 对请求失败做处理
+    return config;
+}, error => {
+    return Promise.reject(error);
+});
+
+
+// 响应拦截器
+service.interceptors.response.use(response => {
+    console.log(response)
+    if (response.data.code === 500) {
+        message.error('对不起出错了哦')
+    }
+    return Promise.resolve(response)
+}, (error) => {
+    if (error.response) {
+        const { status } = error.response;
+        if (status == 401) {
+            localStorage.removeItem("token");
+        } else {
+            alert("出错了,联系管理员")
+        }
+    }
     return Promise.reject(error)
 })
-// 响应拦截器
-service.interceptors.response.use((response) => {
-    // 对响应数据做处理
-    console.log(response)
-    if (response.status === 200) {
-        return response
-    } else {
-        // 全局处理错误
-        message.error(response.data.errMsg)
-    }
-},
-    function (error) {
-        // 对响应错误做处理
-        return Promise.reject(error)
-    });
 
-
-// 获取文章列表
-export const getArticles = (offset = 0, limited = 10) => {
-    return service.post('/api/v1/articleList', {
-        offset, limited
+// 获取首页数据
+export const getHome = () => {
+    return service.post('/select/home')
+}
+// 获取通讯录列表
+export const getArticles = (pageSize, curPage) => {
+    return service.post('/select/communication', {
+        pageSize, curPage
     })
 }
-
-// 通过id删除文章
-export const deleteArticleById = (id) => {
-    return service.post(`/api/v1/articleDelete/${id}`)
+// 获取设备列表
+export const getEquipment = (pageSize, curPage) => {
+    return service.post('/select/device', {
+        pageSize, curPage
+    })
+}
+// 搜索设备
+export const getSearchEquipment = (content) => {
+    return service.post('/search/device', {
+        content
+    })
+}
+//获取短信列表
+export const getNote = (pageSize, curPage) => {
+    return service.post('/select/sms', {
+        pageSize, curPage
+    })
+}
+// 获取通讯录可视化数据
+export const getVisualArticleById = () => {
+    return service.post('/select/statisphone')
+}
+// 获取访问量可视化数据
+export const getPageView = () => {
+    return service.post('/select/statistics')
+}
+// 获取短信可视化数据
+export const getNoteEcHar = () => {
+    return service.post('/select/statisphone')
+}
+// 查询用户
+export const getqueryuser = (pageSize, curPage) => {
+    return service.post('/admin/select', { pageSize, curPage })
+}
+// 添加用户
+export const getadduser = (username, pwd, role) => {
+    return service.post('/admin', { username, pwd, role })
+}
+// 删除用户
+export const getdleteuser = (uid) => {
+    return service.post('/delet/admin', { uid })
+}
+// 通过sid删除短信
+export const deleteNote = (sid) => {
+    return service.get('/delet/sms', { params: { sid } })
+}
+// 通过uid删除通讯录
+export const deleteArticleById = (uid) => {
+    return service.get('/delet/communication', { params: { uid } })
+}
+// 通过pid删除设备
+export const deleteEquipment = (pid) => {
+    return service.get('/delet/device', { params: { pid } })
+}
+// 删除全部通讯录
+export const deleteArticleall = () => {
+    return service.delete('/delet/communication')
+}
+// 删除全部设备
+export const deleteEquipmentall = () => {
+    return service.delete('/delet/device')
+}
+// 删除全部设备
+export const deleteNoteall = () => {
+    return service.delete('/delet/sms')
 }
 
-// 通过id获取文章
-export const getArticleById = (id) => {
-    return service.post(`/api/v1/article/${id}`)
-}
-
-// 保存文章
-export const saveArticle = (id, data) => {
-    return service.post(`/api/v1/articleEdit/${id}`, data)
-}
-
-// 获取文章阅读量
-export const getArticleAmount = () => {
-    return service.post('/api/v1/articleAmount')
-}
-// 获取通知列表
-export const getNotifications = () => {
-    return service.post('/api/v1/notifications')
-}
 // 登录
 export const loginRequest = (userInfo) => {
-        return service.post('/login',userInfo)
-    }
+    return service.post('/login', userInfo)
+}

@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import XLSX from 'xlsx'
 import { Card, Button, Table, Modal, Typography, message } from 'antd'
 import moment from 'moment'
-import './edit.less'
+import { deleteEquipment, getqueryuser, getdleteuser } from '../../requests'
 import { connect } from 'react-redux'
-import { getArticles, deleteArticleById, deleteArticleall } from '../../requests'
 const displayTitle = {
     uid: 'id',
-    phone: '通讯录号码',
-    contact: '通讯录姓名',
-    time: '上传时间',
+    username: '用户名',
+    time: '创建时间',
+    logintime: '上次登录时间',
+    loginIP: '上次登录IP',
+    rolename: '职位'
 
 }
 const mapState = (state) => ({
@@ -17,7 +18,7 @@ const mapState = (state) => ({
 })
 const ButtonGroup = Button.Group
 @connect(mapState)
-class Article extends Component {
+class Queryuser extends Component {
     constructor() {
         super()
         this.state = {
@@ -30,8 +31,6 @@ class Article extends Component {
             isShowArticleModal: false,
             deleteArticleConfirmLoading: false,
             deleteArticleID: null,
-            deleteArticles: false,
-            deleteall: false
         }
     }
     componentDidMount() {
@@ -47,6 +46,16 @@ class Article extends Component {
     createColumns = (a) => {
         const colums = a.map((item, value) => {
             if (item === 'time') {
+                return {
+                    title: displayTitle[item],
+                    key: item,
+                    render: (text, record) => {
+                        const { createAt } = record
+                        return moment(createAt).format('YYYY年MM月DD日 hh:mm:ss')
+                    }
+                }
+            }
+            if (item === 'logintime') {
                 return {
                     title: displayTitle[item],
                     key: item,
@@ -95,7 +104,7 @@ class Article extends Component {
         // })
         this.setState({
             isShowArticleModal: true,
-            deleleArticleTitle: record.contact,
+            deleleArticleTitle: record.username,
             deleteArticleID: record.uid
         })
     }
@@ -104,8 +113,7 @@ class Article extends Component {
         this.setState({
             deleteArticleConfirmLoading: true
         })
-        console.log(this.state.deleteArticleID)
-        deleteArticleById(this.state.deleteArticleID)
+        getdleteuser(this.state.deleteArticleID)
             .then(resp => {
                 if (resp.data.code === 200) {
                     message.success(resp.data.msg)
@@ -120,40 +128,7 @@ class Article extends Component {
                     deleteArticleConfirmLoading: false,
                     isShowArticleModal: false
                 })
-
             })
-    }
-    // 全部删除点击确认框
-    deleteAll = () => {
-        this.setState({
-            deleteArticles: true
-        })
-        deleteArticleall()
-            .then(resp => {
-                if (resp.data.code === 200) {
-                    message.success(resp.data.msg)
-                } else {
-                    message.error(resp.data.msg)
-                }
-            })
-            .finally(() => {
-                this.setState({
-                    deleteArticles: false,
-                    deleteall: false
-                })
-            })
-    }
-    Delete = () => {
-        this.setState({
-            deleteArticles: true
-        })
-
-    }
-    articleModal = () => {
-        this.setState({
-            deleteArticles: false,
-            deleteall: false
-        })
     }
 
     // 弹框取消点击事件
@@ -172,25 +147,25 @@ class Article extends Component {
         this.setState({
             isLoading: true
         })
-        getArticles(this.state.offset, this.state.limited)
+        getqueryuser(this.state.offset, this.state.limited)
             .then(response => {
-                const Articles = response.data.data
-                const Article = []
-                for (let item of Articles) {
+                const notes = response.data.data
+                const note = []
+                for (let item of notes) {
                     var obj = {}
                     for (let key in item) {
-                        if (key === 'uid' || key === 'phone' || key === 'contact' || key === 'time') {
+                        if (key === 'uid' || key === 'username' || key === 'time' || key === 'logintime' || key === 'loginIP' || key === 'rolename') {
                             obj[key] = item[key]
                         }
                     }
-                    Article.push(obj)
+                    note.push(obj)
                 }
                 const columnsKeys = Object.keys(response.data.data[0])
                 const columns = this.createColumns(columnsKeys)
                 // 如果请求完成之后组件已经销毁，就不需要在设置setState
                 // if(!this.updater.isMounted(this)) return
                 this.setData({
-                    dataSource: Article,
+                    dataSource: note,
                     columns
                 })
             })
@@ -239,9 +214,12 @@ class Article extends Component {
             // data.push(values)
             data.push([
                 this.state.dataSource[i].uid,
-                this.state.dataSource[i].phone,
-                this.state.dataSource[i].contact,
-                moment(this.state.dataSource[i].time).format('YYYY年MM月DD日 hh:mm:ss')
+                this.state.dataSource[i].username,
+                this.state.dataSource[i].time,
+                this.state.dataSource[i].logintime,
+                this.state.dataSource[i].loginIP,
+                this.state.dataSource[i].rolename,
+
             ])
         }
         /* convert state to workbook */
@@ -255,12 +233,12 @@ class Article extends Component {
     render() {
         return (
             <>
-                <Card title="通讯录列表"
+                <Card title="设备列表"
                     bordered={false}
                     extra={< Button onClick={this.toExcel} > 导出excel</Button>}
                 >
                     <Table
-                        rowKey={record => record.uid}
+                        rowKey={record => record.pid}
                         dataSource={this.state.dataSource}
                         columns={this.state.columns}
                         loading={this.state.isLoading}
@@ -283,23 +261,9 @@ class Article extends Component {
                     >
                         <Typography>确定要删除:<span style={{ color: '#f00' }}>{this.state.deleleArticleTitle}</span>吗?</Typography>
                     </Modal>
-                    <Modal
-                        title='你现在正在删除全部数据'
-                        visible={this.state.deleteArticles}
-                        onCancel={this.articleModal}
-                        confirmLoading={this.state.deleteall}
-                        onOk={this.deleteAll}
-                    >
-                        <Typography>确定要删除通讯录全部数据吗?</Typography>
-                    </Modal>
                 </Card >
-                <Card
-                    bordered={false}
-                    extra={<Button className="action" onClick={this.Delete}>删除全部通讯录</Button>}
-                >
-                </Card>
             </>
         )
     }
 }
-export default Article
+export default Queryuser

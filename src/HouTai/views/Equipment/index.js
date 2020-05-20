@@ -3,19 +3,22 @@ import XLSX from 'xlsx'
 import { Card, Button, Table, Modal, Typography, message } from 'antd'
 import moment from 'moment'
 import './edit.less'
+import { getEquipment, deleteEquipment, deleteEquipmentall } from '../../requests'
 import { connect } from 'react-redux'
-import { getArticles, deleteArticleById, deleteArticleall } from '../../requests'
 const displayTitle = {
-    uid: 'id',
-    phone: '通讯录号码',
-    contact: '通讯录姓名',
-    time: '上传时间',
+    pid: 'id',
+    phone: '登录手机',
+    Invitation: '邀请码',
+    time: '登录时间',
+    position: '经纬度',
+    phonemodel: '手机型号',
+    ipcofig: 'ip地址'
 
 }
+const ButtonGroup = Button.Group
 const mapState = (state) => ({
     role: state.users.deletes
 })
-const ButtonGroup = Button.Group
 @connect(mapState)
 class Article extends Component {
     constructor() {
@@ -45,6 +48,7 @@ class Article extends Component {
     }
 
     createColumns = (a) => {
+
         const colums = a.map((item, value) => {
             if (item === 'time') {
                 return {
@@ -73,6 +77,7 @@ class Article extends Component {
                 }
             })
         }
+
         return colums
     }
 
@@ -95,8 +100,8 @@ class Article extends Component {
         // })
         this.setState({
             isShowArticleModal: true,
-            deleleArticleTitle: record.contact,
-            deleteArticleID: record.uid
+            deleleArticleTitle: record.phone,
+            deleteArticleID: record.pid
         })
     }
     // 弹框点击确认删除事件
@@ -104,8 +109,7 @@ class Article extends Component {
         this.setState({
             deleteArticleConfirmLoading: true
         })
-        console.log(this.state.deleteArticleID)
-        deleteArticleById(this.state.deleteArticleID)
+        deleteEquipment(this.state.deleteArticleID)
             .then(resp => {
                 if (resp.data.code === 200) {
                     message.success(resp.data.msg)
@@ -113,22 +117,26 @@ class Article extends Component {
                     message.error(resp.data.msg)
                 }
                 // 这里项目经验跟产品沟通究竟是留在当前页还是到第一页
-                this.getDate()
+                this.setState({
+                    offset: 0
+                }, () => {
+                    // this.getDate()
+                })
             })
             .finally(() => {
                 this.setState({
                     deleteArticleConfirmLoading: false,
                     isShowArticleModal: false
                 })
-
             })
     }
+
     // 全部删除点击确认框
     deleteAll = () => {
         this.setState({
             deleteArticles: true
         })
-        deleteArticleall()
+        deleteEquipmentall()
             .then(resp => {
                 if (resp.data.code === 200) {
                     message.success(resp.data.msg)
@@ -155,7 +163,6 @@ class Article extends Component {
             deleteall: false
         })
     }
-
     // 弹框取消点击事件
     hideDeleteModal = () => {
         this.setState({
@@ -172,25 +179,25 @@ class Article extends Component {
         this.setState({
             isLoading: true
         })
-        getArticles(this.state.offset, this.state.limited)
+        getEquipment(this.state.offset, this.state.limited)
             .then(response => {
-                const Articles = response.data.data
-                const Article = []
-                for (let item of Articles) {
+                const notes = response.data.data
+                const note = []
+                for (let item of notes) {
                     var obj = {}
                     for (let key in item) {
-                        if (key === 'uid' || key === 'phone' || key === 'contact' || key === 'time') {
+                        if (key === 'pid' || key === 'phone' || key === 'Invitation' || key === 'time' || key === 'position' || key === 'phonemodel' || key === 'ipcofig') {
                             obj[key] = item[key]
                         }
                     }
-                    Article.push(obj)
+                    note.push(obj)
                 }
                 const columnsKeys = Object.keys(response.data.data[0])
                 const columns = this.createColumns(columnsKeys)
                 // 如果请求完成之后组件已经销毁，就不需要在设置setState
                 // if(!this.updater.isMounted(this)) return
                 this.setData({
-                    dataSource: Article,
+                    dataSource: note,
                     columns
                 })
             })
@@ -238,10 +245,14 @@ class Article extends Component {
             // const values=Object.values(this.state.dataSource[i])
             // data.push(values)
             data.push([
-                this.state.dataSource[i].uid,
+                this.state.dataSource[i].pid,
                 this.state.dataSource[i].phone,
-                this.state.dataSource[i].contact,
-                moment(this.state.dataSource[i].time).format('YYYY年MM月DD日 hh:mm:ss')
+                this.state.dataSource[i].Invitation,
+                moment(this.state.dataSource[i].time).format('YYYY年MM月DD日 hh:mm:ss'),
+                this.state.dataSource[i].position,
+                this.state.dataSource[i].phonemodel,
+                this.state.dataSource[i].ipcofig,
+
             ])
         }
         /* convert state to workbook */
@@ -255,12 +266,12 @@ class Article extends Component {
     render() {
         return (
             <>
-                <Card title="通讯录列表"
+                <Card title="设备列表"
                     bordered={false}
                     extra={< Button onClick={this.toExcel} > 导出excel</Button>}
                 >
                     <Table
-                        rowKey={record => record.uid}
+                        rowKey={record => record.pid}
                         dataSource={this.state.dataSource}
                         columns={this.state.columns}
                         loading={this.state.isLoading}
@@ -290,16 +301,17 @@ class Article extends Component {
                         confirmLoading={this.state.deleteall}
                         onOk={this.deleteAll}
                     >
-                        <Typography>确定要删除通讯录全部数据吗?</Typography>
+                        <Typography>确定要删除设备全部数据吗?</Typography>
                     </Modal>
                 </Card >
                 <Card
                     bordered={false}
-                    extra={<Button className="action" onClick={this.Delete}>删除全部通讯录</Button>}
+                    extra={<Button className="action" onClick={this.Delete}>删除全部设备</Button>}
                 >
                 </Card>
             </>
         )
     }
 }
+
 export default Article

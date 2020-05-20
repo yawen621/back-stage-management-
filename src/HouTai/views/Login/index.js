@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React, { Component } from 'react'
 import { Form, Input, Button, Checkbox, Card, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux'
@@ -20,6 +20,7 @@ class Login extends Component {
             randomStyle: ["circle", "cobweb", "square", "thick", "polygon"]
         }
     }
+ 
     onChange = e => {
         console.log('checked = ', e.target.checked);
         this.setState({
@@ -32,7 +33,6 @@ class Login extends Component {
             ...values,
             remember: checked,
         }
-        console.log('Success', params);
         this.props.login(params)
     }
     onFinishFailed = errorInfo => {
@@ -50,7 +50,6 @@ class Login extends Component {
                         title="QF ADMIN登录"
                         className="qf-login-wrapper"
                     >
-                       
                             <Form
                                 name="normal_login"
                                 className="login-form"
@@ -65,8 +64,8 @@ class Login extends Component {
                                 >
                                     <Input
                                         disabled={this.props.isLoading}
-                                        prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" 
-                                        />
+                                        prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名"
+                                    />
                                 </Form.Item>
                                 <Form.Item
                                     name="pwd"
@@ -95,10 +94,10 @@ class Login extends Component {
                                         </Button>
                                     </Form.Item>
                                 </Form.Item>
-                            </Form>
+                            </Form> 
                     </Card>
                     <ParticlesBg type={this.state.randomStyle[Math.floor(Math.random() * this.state.randomStyle.length)]} bg={true} />
-                    <MouseParticles g={1} color="random" cull="col,image-wrapper"/>
+                    <MouseParticles g={1} color="random" cull="col,image-wrapper" />
                 </div>
         )
     }

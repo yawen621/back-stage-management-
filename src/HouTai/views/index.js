@@ -32,27 +32,27 @@ import loadable from '../views/util/loadable'//自己封装的loadable
 //     loader:()=>import('./NotFound'),
 //     loading:Loading
 // })
-const Dashboard=loadable(()=>import('./Dashboard'))
-const Settings=loadable(()=>import('./Settings'))
+const Equipment=loadable(()=>import('./Equipment'))
+const Note=loadable(()=>import('./Note'))
 const Login=loadable(()=>import('./Login'))
 const ArticleList=loadable(()=>import('./Article'))
-const ArticleEdit=loadable(()=>import('./Article/Edit'))
 const NotFound=loadable(()=>import('./NotFound'))
-const Notifications=loadable(()=>import('./Notifications'))
 const NoAuth=loadable(()=>import('./NoAuth'))
 const Profile=loadable(()=>import('./Profile'))
-const Authority=loadable(()=>import('./Authority'))
 const Home=loadable(()=>import('./Home'))
+const Adduser=loadable(()=>import('./Adduser'))
+const Queryuser=loadable(()=>import('./Queryuser'))
+const Searchequipment=loadable(()=>import('./Searchequipment'))
 export{
-    Dashboard,
+    Equipment,
     Login,
     NotFound,
-    Settings,
+    Note,
     ArticleList,
-    ArticleEdit,
-    Notifications,
     NoAuth,
     Profile,
-    Authority,
-    Home
+    Home,
+    Adduser,
+    Queryuser,
+    Searchequipment
 }

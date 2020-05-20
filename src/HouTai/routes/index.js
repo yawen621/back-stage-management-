@@ -1,17 +1,17 @@
 import {
-    Dashboard,
+    Equipment,
     Login,
     NotFound,
-    Settings,
+    Note,
     ArticleList,
-    ArticleEdit,
-    Notifications,
     NoAuth,
     Profile,
-    Authority,
-    Home
+    Home,
+    Adduser,
+    Queryuser,
+    Searchequipment
 } from '../views'
-import { VideoCameraOutlined, ReadOutlined, MailOutlined, UnlockOutlined,HomeOutlined} from '@ant-design/icons'
+import { VideoCameraOutlined, ReadOutlined, MailOutlined, UnlockOutlined, HomeOutlined, UsergroupAddOutlined, SearchOutlined, VideoCameraAddOutlined } from '@ant-design/icons'
 
 export const mainRouter = [{
     pathname: '/login',
@@ -19,23 +19,37 @@ export const mainRouter = [{
 }, {
     pathname: '/404',
     component: NotFound
+}, {
+    pathname: '/admin/noauth',
+    component: NoAuth,
 }]
 
 export const adminRouter = [{
-    pathname:'/admin/home',
-    icon:HomeOutlined,
-    component:Home,
+    pathname: '/admin/home',
+    icon: HomeOutlined,
+    component: Home,
     isNav: true,
-    title:'首页',
-    isNav:true,
-    roles:['001']
-},{
-    pathname: '/admin/dashboard',
-    component: Dashboard,
-    icon: VideoCameraOutlined,
+    title: '首页',
+    roles: [1]
+}, {
     title: '设备查看',
     isNav: true,
-    roles: ['001'],
+    roles: [1],
+    children: [{
+        pathname: '/admin/equipment',
+        component: Equipment,
+        icon: VideoCameraOutlined,
+        title: '设备查看',
+        isNav: true,
+        roles: [1],
+    },{
+        pathname:'/admin/Searchequipment',
+        conmponent:Searchequipment,
+        icon:VideoCameraAddOutlined,
+        title:'搜索设备',
+        isNav:true,
+        roles:[1]
+    }]
 }, {
     pathname: '/admin/article',
     component: ArticleList,
@@ -43,37 +57,37 @@ export const adminRouter = [{
     icon: ReadOutlined,
     isNav: true,
     exact: true,
-    roles: ['001']
+    roles: [1]
 }, {
-    pathname: '/admin/settings',
-    component: Settings,
+    pathname: '/admin/note',
+    component: Note,
     icon: MailOutlined,
     title: '短信查看',
     isNav: true,
-    roles: ['001']
+    roles: [1]
 }, {
-    pathname: '/admin/authority',
-    component: Authority,
     icon: UnlockOutlined,
     isNav: true,
     title: '权限管理',
-    roles: ['001']
-},
-{
-    pathname: '/admin/article/edit/:id',
-    component: ArticleEdit,
-    roles: ['001']
-}, {
-    pathname: '/admin/noauth',
-    component: NoAuth,
-    roles: ['001', '002', '003']
-}, {
-    pathname: '/admin/Notifications',
-    component: Notifications,
-    roles: ['001', '002', '003']
+    roles: [1],
+    children: [{
+        pathname: '/admin/queryuser',
+        component: Queryuser,
+        icon: SearchOutlined,
+        isNav: true,
+        title: '查询用户',
+        roles: [1]
+    }, {
+        pathname: '/admin/adduser',
+        component: Adduser,
+        icon: UsergroupAddOutlined,
+        isNav: true,
+        title: '添加用户',
+        roles: [1]
+    }]
 }, {
     pathname: '/admin/profile',
     component: Profile,
-    roles: ['001', '002', '003']
+    roles: [1]
 }
 ]

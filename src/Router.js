@@ -28,7 +28,7 @@ export default class Routers extends Component {
                             <Redirect to="/404"></Redirect>
                         </Switch>
                     </Router>
-                </ConfigProvider> 
+                </ConfigProvider>
             </Provider>
         )
     }
